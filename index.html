@@ -3,9 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="index.css">
+    <title>Tic-tac-toe game</title>
 </head>
 <body>
+    <header>
+        <h1>tic-tac-toe</h1>
+    </header>
+
+    <div class="main-menu">
+        <form class="player-form" id="player-form">
+            <legend>Add players</legend>
+            <label for="player1">Player 1:</label>
+            <input type="text" id="player1" name="player1" placeholder="Enter Player 1 Name" required>
+            <label for="player2">Player 2:</label>
+            <input type="text" id="player2" name="player2" placeholder="Enter Player 2 Name" required>
+        </form>
+        <button type="submit" for="player-form" class="add-btn">Add Players</button> 
+    
+        <div class="players">
+            <div class="player1">
+                <h2>Player 1</h2>
+                <p id="player1-name">Name: </p>
+                <p id="player1-marker-display">Marker: <span>X</span></p>
+            </div>
+            <div class="player2">
+                <h2>Player 2</h2>
+                <p id="player2-name">Name: </p>
+                <p id="player2-marker-display">Marker: <span>O</span></p>
+            </div>
+        </div>
+    
+            <button class="start-game">Start game</button>
+    </div>
+
+    <div class="game-display">
+        <div class="game-status">
+            <div class="scores">
+                <p>Player 1: <span id="player1-score">0</span></p>
+                <p>Player 2: <span id="player2-score">0</span></p>
+            </div>
+            <p>Current Turn: <span id="current-turn">Player 1</span></p>
+            <p>Game Status: <span id="game-status">In Progress</span></p>
+        </div>
+        <div class="gameboard">
+            <div class="cell" data-index="0"></div>
+            <div class="cell" data-index="1"></div>
+            <div class="cell" data-index="2"></div>
+            <div class="cell" data-index="3"></div>
+            <div class="cell" data-index="4"></div>
+            <div class="cell" data-index="5"></div>
+            <div class="cell" data-index="6"></div>
+            <div class="cell" data-index="7"></div>
+            <div class="cell" data-index="8"></div>
+        </div>
+        <div>
+            <button class="reset-game">Reset</button>
+            <button class="back-btn">Back</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Tic Tac Toe Game</p>
+        <p class="name">Joseph Samuels</p>
+    </footer>
     <script src="index.js"></script>
 </body>
 </html>

@@ -1,0 +1,201 @@
+*,*::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #181828;
+    color: #e6e6fa; 
+}
+
+header {
+    background-color: #101024; 
+    color: #e0e0ff; 
+    padding: 10px 0;
+    text-align: center;
+}
+
+.main-menu {
+    background-color: #22223b; 
+    color: #f3eaff; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 82vh;
+}
+
+.player-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 800px;
+    padding: 20px;
+    background: #22223b; 
+}
+
+.player-form legend {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.player-form label {
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.player-form input {
+    padding: 10px;
+    border: 1px solid #a89cff;
+    border-radius: 5px;
+    width: 100%;
+    background: #181828;
+    color: #f3eaff;
+    font-size: 1rem;
+}
+
+.add-btn {
+    background-color: #3a3470;
+    color: #f3eaff;
+    font-size: 1.4rem;
+    margin-top: 10px;
+    padding: 10px;
+    border: none;
+    border-radius: 40px;
+    cursor: pointer;
+    width: 300px;
+    align-items: center;
+    transition: background 0.2s;
+}
+
+.add-btn:hover {
+    background-color: #4a3d99;
+    color: #fff;
+}
+
+.players {
+    display: flex;
+    justify-content: space-around;
+    width: 800px;
+    margin-top: 20px;
+}
+
+.start-game {
+    background-color: transparent;
+    color: #f3eaff;
+    padding: 10px 20px;
+    border: 2px solid #a89cff;
+    border-radius: 40px;
+    cursor: pointer;
+    width: 200px;
+    margin-top: 80px;
+    text-align: center;
+    transition: background 0.2s, color 0.2s;
+    font-size: 2rem;
+}
+
+.start-game:hover {
+    background-color: #a89cff;
+    color: #22223b;
+}
+
+footer {
+    background-color: #101024;
+    color: #e0e0ff;
+    text-align: center;
+    padding: 10px 0;
+    width: 100%;
+}
+
+.game-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #22223b;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(58, 52, 112, 0.18);
+    padding: 32px 24px;
+    margin: 32px auto 48px auto; 
+    max-width: 380px;            
+    width: 100%;                 
+    color: #f3eaff;
+    min-height: 480px; 
+    display: none;          
+}
+
+.game-display > div:first-child {
+    width: 100%;
+    margin-bottom: 28px;
+    background: #181828;
+    border-radius: 14px;
+    padding: 24px 0;
+    text-align: center;
+    box-shadow: 0 2px 12px rgba(58, 52, 112, 0.18);
+    color: #e6e6fa;
+}
+
+.game-status {
+    width: 100%;
+    margin-bottom: 24px;
+    text-align: center;
+    color: #e6e6fa;
+}
+
+.scores {
+    margin-bottom: 8px;
+    color: #a89cff;
+}
+
+.gameboard {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);   
+    grid-template-rows: repeat(3, 100px);      
+    gap: 12px;                                 
+    margin-bottom: 16px;
+    justify-content: center;                   
+    align-items: center;                       
+}
+
+
+.cell {
+    background: #181828;
+    border: 2.5px solid #a89cff;
+    border-radius: 12px;
+    font-size: 2.5rem;                         
+    color: #f3eaff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s, color 0.2s;
+    height: 100px;                             
+    width: 100px;                              
+}
+
+.cell:hover {
+    background: #3a3470;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(58, 52, 112, 0.18);
+}
+
+.reset-game, .back-btn {
+    padding: 8px 20px;
+    margin: 0 8px;
+    border: none;
+    border-radius: 6px;
+    background: #3a3470;
+    color: #f3eaff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.reset-game:hover, .back-btn:hover {
+    background: #a89cff;
+    color: #22223b;
+}
+

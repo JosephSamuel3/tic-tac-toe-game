@@ -1,10 +1,9 @@
-
 function player(name, marker) {
-    return {name, marker};
+    return { name, marker };
 }
 
 const gameboard = (function () {
-    //setup the 2d gameboard, has a function that sets markers on the board
+    //setup a board array, has a function that sets markers on the board
     //a function that resets the board, and a function that checks for a win condition
     //and a function that gets the current state of the board
     const board = []
@@ -66,8 +65,8 @@ const gameboard = (function () {
 })();
 
 const gameController = (function () {
-    // This module will handle the game logic, including player turns and checking for a win condition and game state
     let player1, player2, currentPlayer, gameActive = false;
+    let scores = { player1: 0, player2: 0 };
 
     const startGame = (name1, name2) => {
         player1 = player(name1, 'X');
@@ -75,6 +74,13 @@ const gameController = (function () {
         currentPlayer = player1;
         gameboard.initializeBoard();
         gameActive = true;
+        // Reset scores only if new players
+        if (scores.player1Name !== name1 || scores.player2Name !== name2) {
+            scores = { player1: 0, player2: 0, player1Name: name1, player2Name: name2 };
+        } else {
+            scores.player1Name = name1;
+            scores.player2Name = name2;
+        }
     };
 
     const switchPlayer = () => {
@@ -86,8 +92,11 @@ const gameController = (function () {
             const winner = gameboard.checkWinCondition();
             if (winner) {
                 gameActive = false;
+                // Increment score for the winner
+                if (winner === player1.marker) scores.player1++;
+                if (winner === player2.marker) scores.player2++;
                 return `${currentPlayer.name} wins!`;
-            }else if (gameboard.getBoard().every(cell => cell !== null)) {
+            } else if (gameboard.getBoard().every(cell => cell !== null)) {
                 gameActive = false;
                 return 'It\'s a draw!';
             }
@@ -103,34 +112,149 @@ const gameController = (function () {
         currentPlayer = null;
     };
 
-    const keepPlayerScore = () => {
-        // This function is used to keep track of player scores
-        // For simplicity, I used an object to store scores
-        const scores = {
-            [player1.name]: 0,
-            [player2.name]: 0
-        };
+    const getScores = () => ({
+        player1: scores.player1,
+        player2: scores.player2,
+        player1Name: player1 ? player1.name : '',
+        player2Name: player2 ? player2.name : ''
+    });
 
-        return {
-            incrementScore: (winnerName) => {
-                if (scores[winnerName] !== undefined) {
-                    scores[winnerName]++;
-                }
-            },
-            getScores: () => scores
-        };
-    }
+    const getCurrentPlayer = () => currentPlayer;
+
     return {
         startGame,
         makeMove,
         resetGame,
-        keepPlayerScore
+        getScores,
+        getCurrentPlayer
     };
 })();
 
 const displayController = (function () {
-    // This module will handle the UI, including rendering the game board and updating it based on player actions
+    // --- DOM Elements ---
+    const gameStatusElement = document.getElementById('game-status');
+    const currentTurnElement = document.getElementById('current-turn');
+    const player1ScoreElement = document.getElementById('player1-score');
+    const player2ScoreElement = document.getElementById('player2-score');
+    const player1NameDisplay = document.getElementById('player1-name');
+    const player2NameDisplay = document.getElementById('player2-name');
+    const addBtn = document.querySelector('.add-btn');
+    const startBtn = document.querySelector('.start-game');
+    const mainMenu = document.querySelector('.main-menu');
+    const gameDisplay = document.querySelector('.game-display');
+    const resetBtn = document.querySelector('.reset-game');
+    const backBtn = document.querySelector('.back-btn');
+    const cells = document.querySelectorAll('.cell');
 
+    // --- Helper Functions ---
+
+    // Get player names from form
+    function getPlayerNames() {
+        return {
+            player1: document.getElementById('player1').value.trim(),
+            player2: document.getElementById('player2').value.trim()
+        };
+    }
+
+    // Update player name displays in menu and score area
+    function updatePlayerNameDisplays() {
+        const { player1, player2 } = gameController.getScores();
+        player1NameDisplay.textContent = `Name: ${player1 ? player1 : ''}`;
+        player2NameDisplay.textContent = `Name: ${player2 ? player2 : ''}`;
+        updateScoreLabels();
+    }
+
+    // Update score numbers and labels
+    function updateScoreLabels() {
+        const scores = gameController.getScores();
+        player1ScoreElement.textContent = scores.player1;
+        player2ScoreElement.textContent = scores.player2;
+        player1ScoreElement.parentElement.firstChild.textContent = `${scores.player1Name}: `;
+        player2ScoreElement.parentElement.firstChild.textContent = `${scores.player2Name}: `;
+    }
+
+    // Clear the game board UI and reset status
+    function clearBoardUI() {
+        gameboard.resetBoard();
+        cells.forEach(cell => cell.textContent = '');
+        gameStatusElement.textContent = 'In Progress';
+        const scores = gameController.getScores();
+        currentTurnElement.textContent = scores.player1Name;
+    }
+
+    // --- Event Handlers ---
+
+    // Add Players
+    addBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        const { player1, player2 } = getPlayerNames();
+        if (player1 && player2) {
+            player1NameDisplay.textContent = `Name: ${player1}`;
+            player2NameDisplay.textContent = `Name: ${player2}`;
+            updateScoreLabels();
+        }
+    });
+
+    // Start Game
+    startBtn.addEventListener('click', function () {
+        const { player1, player2 } = getPlayerNames();
+        if (!player1 || !player2) {
+            alert('Please add both player names before starting the game.');
+            return;
+        }
+        mainMenu.style.display = 'none';
+        gameDisplay.style.display = 'flex';
+        gameController.startGame(player1, player2);
+        updateScoreLabels();
+        clearBoardUI();
+        currentTurnElement.textContent = player1;
+    });
+
+    // Reset Game
+    resetBtn.addEventListener('click', function () {
+        const scores = gameController.getScores();
+        gameController.resetGame();
+        gameController.startGame(scores.player1Name, scores.player2Name);
+        clearBoardUI();
+    });
+
+    // Back to Main Menu
+    backBtn.addEventListener('click', function () {
+        gameController.resetGame();
+        clearBoardUI();
+        gameDisplay.style.display = 'none';
+        mainMenu.style.display = 'flex';
+    });
+
+    // Handle Cell Clicks
+    cells.forEach(cell => {
+        cell.addEventListener('click', function () {
+            const index = parseInt(cell.getAttribute('data-index'));
+            if (cell.textContent !== '') return;
+
+            const result = gameController.makeMove(index);
+            const board = gameboard.getBoard();
+            cell.textContent = board[index];
+
+            if (result === null) {
+                // No winner yet, update turn
+                const currentPlayer = gameController.getCurrentPlayer();
+                currentTurnElement.textContent = currentPlayer.name;
+                gameStatusElement.textContent = 'In Progress';
+            } else {
+                // Game ended (win or draw)
+                gameStatusElement.textContent = result;
+                updateScoreLabels();
+            }
+        });
+    });
+
+    // --- Initial UI State ---
+    window.addEventListener('DOMContentLoaded', function () {
+        mainMenu.style.display = 'flex';
+        gameDisplay.style.display = 'none';
+        updateScoreLabels();
+    });
 })();
 
 globalThis.gameController = gameController;
